@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mapper.SysRoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.study.domain.system.SysRole">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        <result property="roleCode" column="role_code" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,role_name,role_code,
+        description,create_time,update_time,
+        is_deleted
+    </sql>
+
+    <select id="page" resultType="com.study.domain.system.SysRole">
+        SELECT
+        id,
+        role_name,
+        role_code,
+        description,
+        create_time,
+        update_time,
+        is_deleted
+        FROM
+        `sys_role`
+        <where>
+            <if test="vo.roleName != null and vo.roleName != ''">
+                role_name LIKE CONCAT('%',#{vo.roleName},'%')
+            </if>
+            AND is_deleted = 0
+        </where>
+        ORDER BY id DESC
+    </select>
+
+    <select id="getRoleByUserId" resultType="com.study.domain.system.SysRole">
+        SELECT r.`id`,
+               role_name,
+               role_code,
+               description
+        FROM `sys_role` AS r
+                 INNER JOIN (SELECT role_id AS id FROM `sys_user_role` WHERE user_id = #{userId}) AS ur ON r.id = ur.id
+        WHERE is_deleted = 0
+    </select>
+</mapper>

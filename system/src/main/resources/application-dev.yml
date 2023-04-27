@@ -1,0 +1,14 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /admin #大坑!! 在filter中匹配url时会省略context-path
+
+spring:
+  datasource: #连接数据库
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/guigu-auth?characterEncoding=utf-8&useSSL=false
+    username: root
+    password: yz2021
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl    #打印SQL
