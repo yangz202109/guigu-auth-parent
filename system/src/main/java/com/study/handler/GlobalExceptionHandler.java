@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
     private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     //1.处理全局异常
-   // @ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)
     public ResultData<String> error(Exception e) {
         logger.error("服务器异常:{}", e.getMessage());
         return ResultData.error("服务器异常");

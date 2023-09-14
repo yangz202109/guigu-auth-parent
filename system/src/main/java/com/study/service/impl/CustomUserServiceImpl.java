@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author yangz
@@ -45,7 +47,8 @@ public class CustomUserServiceImpl implements UserDetailsService {
 
         //获取当前用户有权限的菜单
         List<SysMenu> menus = sysMenuService.getMenuByUserId(Long.parseLong(sysUser.getId()));
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         for (SysMenu menu : menus) {
             authorities.add(new SimpleGrantedAuthority(menu.toString()));
         }

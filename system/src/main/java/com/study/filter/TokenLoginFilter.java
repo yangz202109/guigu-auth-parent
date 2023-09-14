@@ -69,7 +69,7 @@
 //        CustomUser customUser = (CustomUser) authResult.getPrincipal();
 //        //生成token
 //        SysUser sysUser = customUser.getSysUser();
-//        String token = JwtUtil.createToken(Convert.toLong(sysUser.getId()), sysUser.getUsername());
+//        String token = JwtUtil.createToken(sysUser.getId(), sysUser.getUsername());
 //        //将token放入response
 //        Map<String, String> map = new HashMap<>(1);
 //        map.put("token", token);

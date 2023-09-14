@@ -1,5 +1,6 @@
 package com.study.handler;
 
+import com.study.constant.HttpStatus;
 import com.study.domain.ResultData;
 import com.study.utils.ResponseUtil;
 import org.springframework.security.access.AccessDeniedException;
@@ -13,6 +14,6 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) {
-        ResponseUtil.out(response, new ResultData<>(false, 403L, "无权限", ""));
+        ResponseUtil.out(response, new ResultData<>(false, HttpStatus.FORBIDDEN, "无权限", ""));
     }
 }

@@ -2,18 +2,16 @@ package com.study.controller;
 
 import cn.hutool.crypto.SecureUtil;
 import com.study.domain.ResultData;
-import com.study.domain.system.SysRole;
 import com.study.domain.system.SysUser;
 import com.study.domain.vo.LoginVo;
-import com.study.service.SysRoleService;
 import com.study.service.SysUserService;
-import com.study.utils.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +27,6 @@ import java.util.Map;
 public class UserController {
     @Resource
     private SysUserService userService;
-    @Resource
-    private SysRoleService roleService;
 
     @ApiOperation("获取全部用户")
     @GetMapping("/findAll")
@@ -70,18 +66,10 @@ public class UserController {
 
     @ApiOperation("查看自己信息")
     @GetMapping("/lookSelf")
-    public ResultData<Map<String, Object>> lookMe(HttpServletRequest request) {
-        String token = request.getHeader("token");
-        Long id = JwtUtil.getUserId(token);
-
-        SysUser sysUser = userService.getById(id);
-        List<SysRole> roles = roleService.getRoleByUserId(id);
-
-        Map<String, Object> msg = new HashMap<>(3);
-        msg.put("id", sysUser.getId());
-        msg.put("username", sysUser.getUsername());
-        msg.put("roles", roles);
+    public ResultData<Map<String, Object>> lookMe() {
+        Map<String, Object> msg = new HashMap<>(1);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        msg.put("userInfo", authentication.getPrincipal());
         return ResultData.ok(msg);
     }
-
 }

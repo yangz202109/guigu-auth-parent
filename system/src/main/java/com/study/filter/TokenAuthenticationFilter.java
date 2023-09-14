@@ -1,22 +1,21 @@
 package com.study.filter;
 
 import cn.hutool.core.util.StrUtil;
-import com.study.domain.ResultData;
+import com.study.constant.CacheConstants;
 import com.study.utils.JwtUtil;
-import com.study.utils.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * @author yangz
@@ -30,8 +29,10 @@ import java.util.Collections;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public TokenAuthenticationFilter() {
+    public TokenAuthenticationFilter(RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -54,14 +55,19 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
      */
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         //从请求中取出token
-        String token = request.getHeader("token");
+        String token = request.getHeader("Authorization");
         logger.info("请求头token:" + token);
 
         if (StrUtil.isNotEmpty(token)) {
-            String username = JwtUtil.getUsername(token);
-            logger.info("username:" + username);
-            if (StrUtil.isNotEmpty(username)) {
-                return new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
+            Map<String, String> tokeInfo = JwtUtil.getUsernameAndUserId(token);
+            if (tokeInfo != null) {
+                String userId = tokeInfo.get("userId");
+                String redisKey = CacheConstants.LOGIN_TOKEN_KEY + userId;
+                //获取该用户最新的token
+                String userToken = (String) redisTemplate.opsForValue().get(redisKey);
+                if (userToken != null && userToken.equals(token)) {
+                    return new UsernamePasswordAuthenticationToken(tokeInfo, null, Collections.emptyList());
+                }
             }
         }
         return null;

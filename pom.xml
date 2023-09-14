@@ -32,6 +32,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <!--依赖版本-->
         <mybatis-plus.version>3.5.1</mybatis-plus.version>
+        <redis-version>2.7.13</redis-version>
         <hutool.version>5.6.6</hutool.version>
         <fastjson.version>1.2.78</fastjson.version>
         <jwt.version>0.7.0</jwt.version>
@@ -53,6 +54,11 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>${redis-version}</version>
             </dependency>
             <!--knife4j(swagger)-->
             <dependency>

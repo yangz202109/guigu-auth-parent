@@ -1,5 +1,6 @@
 package com.study.handler;
 
+import com.study.constant.HttpStatus;
 import com.study.domain.ResultData;
 import com.study.utils.ResponseUtil;
 import org.springframework.security.core.AuthenticationException;
@@ -14,6 +15,6 @@ import java.io.IOException;
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        ResponseUtil.out(response, new ResultData<>(false, 401L, "token无效/未登录", ""));
+        ResponseUtil.out(response, new ResultData<>(false, HttpStatus.UNAUTHORIZED, "token无效/未登录", ""));
     }
 }

@@ -1,7 +1,7 @@
 package com.study.service.impl;
 
-import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.study.constant.CacheConstants;
 import com.study.custom.CustomUser;
 import com.study.domain.system.SysUser;
 import com.study.domain.vo.LoginVo;
@@ -9,6 +9,7 @@ import com.study.mapper.SysUserMapper;
 import com.study.service.SysUserService;
 import com.study.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -26,6 +28,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
 
     @Resource
     private AuthenticationManager authenticationManager;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public Map<String, Object> login(LoginVo loginVo) {
@@ -40,10 +44,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
 
             CustomUser principal = (CustomUser) auth.getPrincipal();
             SysUser sysUser = principal.getSysUser();
-            final String token = JwtUtil.createToken(Convert.toLong(sysUser.getId()), sysUser.getUsername());
+            final String token = JwtUtil.createToken(sysUser.getId(), sysUser.getUsername());
             result.put("token", token);
             result.put("userId", sysUser.getId());
             result.put("username", sysUser.getUsername());
+
+            redisTemplate.opsForValue().set(CacheConstants.LOGIN_TOKEN_KEY +sysUser.getId(),token,10800, TimeUnit.SECONDS);
         } catch (BadCredentialsException e) {
             log.error("认证失败:{}", e.getMessage());
         }
