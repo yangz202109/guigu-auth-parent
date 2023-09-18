@@ -41,4 +41,19 @@ public class CacheConstants
      * 登录账户密码错误次数 redis key
      */
     public static final String PWD_ERR_CNT_KEY = "pwd_err_cnt:";
+
+    /**
+     * 登录账户密码错误限制次数
+     */
+    public static final Integer PWD_ERR_NUM = 3;
+
+    /**
+     * 登录账户密码错误限制有效时间(秒)
+     */
+    public static final Long PWD_ERR_EXPIRATION = 1800L;
+
+    /** token有效时间(秒)  3天 */
+    public static final Long TOKEN_EXPIRATION = 259200L;
+
+
 }

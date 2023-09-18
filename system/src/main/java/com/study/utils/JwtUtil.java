@@ -8,6 +8,7 @@ package com.study.utils;
  */
 
 import cn.hutool.core.util.StrUtil;
+import com.study.constant.CacheConstants;
 import io.jsonwebtoken.*;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,8 +16,6 @@ import java.util.Map;
 
 public class JwtUtil {
 
-    //toke的过期时间
-    private static final long tokenExpiration = 60 * 60 * 1000L;// 60 * 60 *1000  一个小时
     //加密的秘钥
     private static final String tokenSignKey = "123456";
 
@@ -24,7 +23,7 @@ public class JwtUtil {
     public static String createToken(String userId, String username) {
         String token = Jwts.builder()
                 .setSubject("AUTH-USER")//主题
-                .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))//设置过期时间(当前时间+tokenExpiration)
+                .setExpiration(new Date(System.currentTimeMillis() + CacheConstants.TOKEN_EXPIRATION))//设置过期时间(当前时间+tokenExpiration)
                 .claim("userId", userId)//自定义的字段
                 .claim("username", username)
                 .signWith(SignatureAlgorithm.HS512, tokenSignKey)//根据指定加密规则和秘钥进行加密
