@@ -19,6 +19,9 @@ spring:
         max-wait: 1ms
         max-idle: 8
         min-idle: 0
+logging:
+  level:
+    root: debug
 #mybatis-plus:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

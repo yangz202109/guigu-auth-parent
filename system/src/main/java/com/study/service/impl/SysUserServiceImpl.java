@@ -63,7 +63,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
             String script = "redis.call('INCRBY',KEYS[1],1) redis.call('EXPIRE',KEYS[1],ARGV[1])";
             Long execute = redisTemplate.execute(new DefaultRedisScript<>(script, Long.class),
                     Collections.singletonList(key), CacheConstants.PWD_ERR_EXPIRATION);
-            log.info("认证失败:{},记录失败:{}", e.getMessage(), execute);
+            log.debug("认证失败:{},记录失败:{}", e.getMessage(), execute);
         }
         return result;
     }

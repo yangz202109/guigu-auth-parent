@@ -48,7 +48,7 @@ public class CacheConstants
     public static final Integer PWD_ERR_NUM = 3;
 
     /**
-     * 登录账户密码错误限制有效时间(秒)
+     * 登录账户密码错误限制有效时间(秒) 30分钟
      */
     public static final Long PWD_ERR_EXPIRATION = 1800L;
 
