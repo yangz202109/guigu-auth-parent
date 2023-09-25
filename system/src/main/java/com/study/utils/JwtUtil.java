@@ -21,7 +21,7 @@ public class JwtUtil {
 
     //根据用户id和名称生成字符串
     public static String createToken(String userId, String username) {
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setSubject("AUTH-USER")//主题
                 .setExpiration(new Date(System.currentTimeMillis() + CacheConstants.TOKEN_EXPIRATION))//设置过期时间(当前时间+tokenExpiration)
                 .claim("userId", userId)//自定义的字段
@@ -29,7 +29,6 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS512, tokenSignKey)//根据指定加密规则和秘钥进行加密
                 .compressWith(CompressionCodecs.GZIP)//将字符串进行压缩到一行
                 .compact();
-        return token;
     }
 
 

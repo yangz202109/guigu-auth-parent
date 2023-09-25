@@ -15,8 +15,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id
-        ,role_name,role_code,
+        id,role_name,role_code,
         description,create_time,update_time,
         is_deleted
     </sql>

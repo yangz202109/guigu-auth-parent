@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @author yangz
- * @date ${DATE} - ${TIME}
  */
 @MapperScan(basePackages = "com.study.mapper")
 @SpringBootApplication
