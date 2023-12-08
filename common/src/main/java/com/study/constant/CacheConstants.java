@@ -54,6 +54,4 @@ public class CacheConstants
 
     /** token有效时间(秒)  3天 */
     public static final Long TOKEN_EXPIRATION = 259200L;
-
-
 }

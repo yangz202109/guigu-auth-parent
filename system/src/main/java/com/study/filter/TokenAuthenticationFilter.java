@@ -29,6 +29,7 @@ import java.util.Map;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
+
     private final RedisTemplate<String, Object> redisTemplate;
 
     public TokenAuthenticationFilter(RedisTemplate<String, Object> redisTemplate) {
@@ -43,7 +44,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         if (null != authentication) {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
         chain.doFilter(request, response);
     }
 
