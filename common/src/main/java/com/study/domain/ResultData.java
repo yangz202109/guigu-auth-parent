@@ -37,6 +37,10 @@ public class ResultData<T> implements Serializable {
         return new ResultData<>(false, HttpStatus.ERROR, msg, null);
     }
 
+    public static <T> ResultData<T> error(Integer code,String msg) {
+        return new ResultData<>(false, code, msg, null);
+    }
+
     @Override
     public String toString() {
         return JSON.toJSONString(this);

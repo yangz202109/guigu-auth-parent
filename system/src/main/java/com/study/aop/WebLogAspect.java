@@ -2,6 +2,7 @@ package com.study.aop;
 
 import com.study.domain.ResultData;
 import com.study.domain.system.WebLog;
+import com.study.exception.BusinessException;
 import com.study.service.WebLogService;
 import com.study.utils.IdSnowflakeUtil;
 import org.aspectj.lang.JoinPoint;
@@ -31,12 +32,16 @@ public class WebLogAspect {
     public void webLog() {
     }
 
-    @Before("webLog()")
+    //@Before("webLog()")
     public void doBefore(JoinPoint joinPoint) {
     }
 
     @AfterReturning(value = "webLog()", returning = "ret")
     public void doAfterReturning(JoinPoint joinPoint, Object ret) {
+        if(ret == null || ret instanceof ResultData){
+            throw new BusinessException(500,"接口返回格式错误");
+        }
+
         WebLog webLog = new WebLog();
         webLog.setId(IdSnowflakeUtil.getId());
         webLog.setCreateTime(LocalDateTime.now());

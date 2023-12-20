@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResultData<String> error(BusinessException e) {
         log.debug("服务器异常:{}", e.getMsg());
-        return ResultData.error(e.getMsg());
+        return ResultData.error(e.getCode(), e.getMsg());
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
