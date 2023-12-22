@@ -7,9 +7,13 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -88,6 +92,26 @@ public class RedPackageController {
         }
         //3 某个用户抢过了，不可以作弊重新抢
         return ResultData.error(-2, userId + ":用户你已经抢过该红包了");
+    }
+
+    @ApiOperation("查看红包记录")
+    @GetMapping("/getRecord/{redPackageKey}")
+    public ResultData redPackageRecord(@PathVariable String redPackageKey) {
+        Map<String, Object> result = new HashMap<>();
+
+        String key = RED_PACKAGE_KEY + redPackageKey;
+        List<Object> redPackages = redisTemplate.opsForList().range(key, 0, -1);
+        if (redPackages == null) {
+            return ResultData.error(-1, "红包记录已删除");
+        }
+        //获取红包剩余列表
+        result.put("remainingList", redPackages);
+        //获取红包剩余个数
+        result.put("remainingSize", redPackages.size());
+        //获取红包领取记录
+        Map<Object, Object> receives = redisTemplate.opsForHash().entries(RED_PACKAGE_CONSUME_KEY + redPackageKey);
+        result.put("receiveList", receives);
+        return ResultData.ok(result);
     }
 
     /**
