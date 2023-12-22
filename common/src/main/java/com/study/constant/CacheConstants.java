@@ -52,6 +52,6 @@ public class CacheConstants
      */
     public static final Long PWD_ERR_EXPIRATION = 1800L;
 
-    /** token有效时间(秒)  3天 */
-    public static final Long TOKEN_EXPIRATION = 259200L;
+    /** token有效时间(毫秒)  3天 */
+    public static final Long TOKEN_EXPIRATION = 259200000L;
 }

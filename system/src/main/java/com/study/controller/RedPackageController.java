@@ -1,22 +1,26 @@
 package com.study.controller;
 
 import cn.hutool.core.util.IdUtil;
+import com.study.domain.ResultData;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 抢红包
- *
  * @author yangz
  * @createTime 2023/12/19 - 14:21
  */
+@Api(tags = "红包管理")
+@Slf4j
 @RestController
+@RequestMapping("/redpackage")
 public class RedPackageController {
 
     public static final String RED_PACKAGE_KEY = "redpackage:";
@@ -33,8 +37,9 @@ public class RedPackageController {
      * @param redPackageNumber 红包的个数
      * @return
      */
-    @PostMapping("/send")
-    public String sendRedPackage(int totalMoney, int redPackageNumber) {
+    @ApiOperation("发红包")
+    @GetMapping("/send")
+    public ResultData<String> sendRedPackage(int totalMoney, int redPackageNumber) {
         //1 拆红包，总金额拆分成多少个红包，每个小红包里面包多少钱
         Integer[] splitRedPackages = splitRedPackage(totalMoney, redPackageNumber);
 
@@ -45,9 +50,9 @@ public class RedPackageController {
         redisTemplate.opsForList().leftPushAll(key, splitRedPackages);
         redisTemplate.expire(key, 1, TimeUnit.DAYS);
 
-        int[] num = Arrays.stream(splitRedPackages).mapToInt(Integer::valueOf).toArray();
+        //int[] num = Arrays.stream(splitRedPackages).mapToInt(Integer::valueOf).toArray();
 
-        return key + "\t" + "\t" + Arrays.toString(num);
+        return ResultData.ok(key);
     }
 
     /**
@@ -58,8 +63,10 @@ public class RedPackageController {
      * @param userId        用户id
      * @return 提示
      */
-    @RequestMapping("/rob")
-    public String rodRedPackage(String redPackageKey, String userId) {
+    @ApiOperation("抢红包")
+    @GetMapping("/rob")
+    public ResultData<String> rodRedPackage(String redPackageKey, String userId) {
+
         //1 验证某个用户是否抢过红包
         Object redPackage = redisTemplate.opsForHash().get(RED_PACKAGE_CONSUME_KEY + redPackageKey, userId);
 
@@ -70,16 +77,17 @@ public class RedPackageController {
             if (partRedPackage != null) {
                 //2.2 抢到手后，记录进去hash表示谁抢到了多少钱的某一个红包
                 redisTemplate.opsForHash().put(RED_PACKAGE_CONSUME_KEY + redPackageKey, userId, partRedPackage);
-                System.out.println("用户: " + userId + "\t 抢到多少钱红包: " + partRedPackage);
+
+                log.info("用户:{} ,抢到多少钱红包: {}", userId, partRedPackage);
                 //TODO 后续异步进mysql或者RabbitMQ进一步处理
 
-                return String.valueOf(partRedPackage);
+                return ResultData.ok("抢到的红包金额:" + partRedPackage);
             }
             //抢完
-            return "errorCode:-1,红包抢完了";
+            return ResultData.error(-1, "红包已抢完");
         }
         //3 某个用户抢过了，不可以作弊重新抢
-        return "errorCode:-2, message: " + "\t" + userId + " 用户你已经抢过红包了";
+        return ResultData.error(-2, userId + ":用户你已经抢过该红包了");
     }
 
     /**

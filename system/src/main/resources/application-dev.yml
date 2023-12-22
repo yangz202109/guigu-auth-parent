@@ -21,7 +21,7 @@ spring:
         min-idle: 0
 logging:
   level:
-    root: error
+    root: info
 #mybatis-plus:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

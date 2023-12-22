@@ -38,10 +38,6 @@ public class WebLogAspect {
 
     @AfterReturning(value = "webLog()", returning = "ret")
     public void doAfterReturning(JoinPoint joinPoint, Object ret) {
-        if(ret == null || ret instanceof ResultData){
-            throw new BusinessException(500,"接口返回格式错误");
-        }
-
         WebLog webLog = new WebLog();
         webLog.setId(IdSnowflakeUtil.getId());
         webLog.setCreateTime(LocalDateTime.now());
