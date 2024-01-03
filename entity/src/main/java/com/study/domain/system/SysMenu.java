@@ -7,10 +7,9 @@ import com.study.domain.base.MyTreeNote;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import java.util.List;
+import java.util.Objects;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(description = "菜单")
 @TableName("sys_menu")
@@ -68,6 +67,16 @@ public class SysMenu extends BaseEntity implements MyTreeNote<SysMenu> {
     @Override
     public SysMenu parent() {
         return parentId == 0L ? null : new SysMenu(parentId);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof SysMenu && Objects.equals(getId(), ((SysMenu) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
 
