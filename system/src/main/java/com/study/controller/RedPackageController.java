@@ -96,7 +96,7 @@ public class RedPackageController {
 
     @ApiOperation("查看红包记录")
     @GetMapping("/getRecord/{redPackageKey}")
-    public ResultData redPackageRecord(@PathVariable String redPackageKey) {
+    public ResultData<Map<String, Object>> redPackageRecord(@PathVariable String redPackageKey) {
         Map<String, Object> result = new HashMap<>();
 
         String key = RED_PACKAGE_KEY + redPackageKey;
@@ -115,7 +115,9 @@ public class RedPackageController {
     }
 
     /**
-     * 1 拆完红包总金额+每个小红包金额别太离谱
+     * 
+     * 1 拆完红包总金额+每个小红包金额.
+     *
      *
      * @param totalMoney       总金额
      * @param redPackageNumber 红包的个数

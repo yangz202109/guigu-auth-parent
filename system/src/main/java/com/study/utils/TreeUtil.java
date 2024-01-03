@@ -1,10 +1,10 @@
 package com.study.utils;
 
 import cn.hutool.core.convert.Convert;
+import com.study.domain.base.MyTreeNote;
 import com.study.domain.system.SysMenu;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author yangz
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class TreeUtil {
 
-    public static List<SysMenu> build(List<SysMenu> menus) {
+    public static List<SysMenu> buildMenu(List<SysMenu> menus) {
         if (menus == null){
             return null;
         }
@@ -36,6 +36,31 @@ public class TreeUtil {
             }
         }
         return parentMenu;
+    }
+
+
+    /**
+     * 通用树生成方法
+     * @param list 原始集合数据
+     * @param <T> 原始数据类型
+     * @return 树结构数据
+     */
+    public static <T extends MyTreeNote<T>> List<T> build(List<T> list) {
+        //第一次遍历: 记录节点间的父子关系
+        Map<T, List<T>> relations = new HashMap<>();
+        for (T node : list) {
+            List<T> relation = relations.computeIfAbsent(node.parent(), (p) -> new LinkedList<>());
+            relation.add(node);
+        }
+        List<T> roots = relations.get(null); //父节点为null的即为根节点
+        //第二次遍历: 根据父子关系建立树
+        Stack<T> stack = roots.stream().collect(Collectors.toCollection(Stack::new));
+        while (!stack.isEmpty()) {
+            T node =  stack.pop();
+            node.setChildren(relations.getOrDefault(node, Collections.emptyList()));
+            stack.addAll(node.getChildren());
+        }
+        return roots;
     }
 
 }
