@@ -20,9 +20,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.annotation.Resource;
 
 /**
+ *  springSecurity自定义配置类
  * @author yangz
  * @date 2022/12/9 - 15:05
- * springSecurity配置类
  */
 @Configuration
 @EnableWebSecurity //开启springSecurity的默认行为

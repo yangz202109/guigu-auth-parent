@@ -1,6 +1,7 @@
 package com.study.custom;
 
 import com.study.domain.system.SysUser;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
@@ -15,7 +16,8 @@ public class CustomUser implements UserDetails {
     /**
      * 我们自己的用户实体对象，要调取用户信息时直接获取这个实体对象
      */
-    private SysUser sysUser;
+    @Getter
+    private final SysUser sysUser;
 
     /**
      * 权限集合
@@ -39,10 +41,6 @@ public class CustomUser implements UserDetails {
     public CustomUser(SysUser sysUser, Set<? extends GrantedAuthority> authorities) {
         this.sysUser = sysUser;
         this.authorities = authorities;
-    }
-
-    public SysUser getSysUser() {
-        return sysUser;
     }
 
     @Override

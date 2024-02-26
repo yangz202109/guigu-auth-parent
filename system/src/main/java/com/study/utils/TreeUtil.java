@@ -42,7 +42,7 @@ public class TreeUtil {
     /**
      * 通用树生成方法
      * @param list 原始集合数据
-     * @param <T> 原始数据类型
+     * @param <T> 原始数据类型(必须实现自定义树生成接口)
      * @return 树结构数据
      */
     public static <T extends MyTreeNote<T>> List<T> build(List<T> list) {

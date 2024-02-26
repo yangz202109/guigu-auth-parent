@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.study.constant.HttpStatus;
 import lombok.Data;
 import java.io.Serializable;
+
 /**
+ * 自定义统一响应结果返回类
  * @author yangz
  * @date 2022/12/3 - 11:55
  */

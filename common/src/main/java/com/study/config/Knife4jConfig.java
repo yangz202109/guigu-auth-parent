@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *  *Knife4j自定义配置类
  * @author yangz
  * @date 2022/12/5 - 10:04
- * Knife4j配置信息
  */
 @Configuration
 @EnableSwagger2WebMvc //开启swagger功能

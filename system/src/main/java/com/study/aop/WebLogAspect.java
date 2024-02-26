@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
+ * 接口访问切面类
  * 拦截所有web请求,记录操作
  *
  * @author yangz

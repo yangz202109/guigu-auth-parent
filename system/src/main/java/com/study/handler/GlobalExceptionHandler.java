@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * @author yangz
  * @date 2022/12/6 - 13:45
- * 全局异常处理类
+ * 全局异常处理类,捕获controller抛出的异常返回自定义提示信息
  */
-@RestControllerAdvice //捕获controller抛出的异常
+@RestControllerAdvice
 public class GlobalExceptionHandler {
     private final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 

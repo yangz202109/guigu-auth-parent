@@ -1,12 +1,5 @@
 package com.study.utils;
 
-/**
- * @author yangz
- * @date 2022/12/8 - 14:28
- * <p>
- * 生成JSON Web令牌的工具类
- */
-
 import cn.hutool.core.util.StrUtil;
 import com.study.constant.CacheConstants;
 import io.jsonwebtoken.*;
@@ -14,6 +7,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author yangz
+ * @date 2022/12/8 - 14:28
+ *
+ * 生成JSON Web令牌的工具类
+ */
 public class JwtUtil {
 
     //加密的秘钥
