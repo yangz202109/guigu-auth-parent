@@ -1,13 +1,17 @@
 package com.study.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.study.constant.CacheConstants;
+import com.study.constant.HttpStatus;
 import com.study.custom.CustomUser;
 import com.study.domain.system.SysUser;
 import com.study.domain.vo.LoginVo;
 import com.study.exception.BusinessException;
 import com.study.mapper.SysUserMapper;
 import com.study.service.SysUserService;
+import com.study.utils.IdSnowflakeUtil;
 import com.study.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -71,6 +75,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
     @Override
     public void logout() {
         SecurityContextHolder.clearContext();
+    }
+
+    @Override
+    public Boolean addUser(LoginVo loginVo) {
+        if (Objects.isNull(loginVo) || StrUtil.isEmpty(loginVo.getUsername()) || StrUtil.isEmpty(loginVo.getPassword())) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "参数为空");
+        }
+        SysUser sysUser = new SysUser();
+        sysUser.setUsername(loginVo.getUsername());
+        sysUser.setPassword(SecureUtil.md5(loginVo.getPassword()));
+        sysUser.setId(IdSnowflakeUtil.getId().toString());
+        sysUser.setIsDeleted(0);
+        sysUser.setStatus(1);
+        sysUser.setCreateTime(new Date());
+        sysUser.setUpdateTime(new Date());
+
+        return baseMapper.insert(sysUser) > 0;
     }
 
     public Boolean isErrorNum(String username) {

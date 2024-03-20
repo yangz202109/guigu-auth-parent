@@ -55,7 +55,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
      */
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         //从请求中取出token
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader("token");
         log.info("请求头token:" + token);
 
         if (StrUtil.isNotEmpty(token)) {

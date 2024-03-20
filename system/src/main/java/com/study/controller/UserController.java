@@ -1,6 +1,5 @@
 package com.study.controller;
 
-import cn.hutool.crypto.SecureUtil;
 import com.study.domain.ResultData;
 import com.study.domain.system.SysUser;
 import com.study.domain.vo.LoginVo;
@@ -36,9 +35,8 @@ public class UserController {
 
     @ApiOperation("用户注册")
     @PostMapping("/register")
-    public ResultData<String> register(@RequestBody SysUser sysUser) {
-        sysUser.setPassword(SecureUtil.md5(sysUser.getPassword()));
-        boolean inSuccess = userService.save(sysUser);
+    public ResultData<String> register(@RequestBody LoginVo loginVo) {
+        boolean inSuccess = userService.addUser(loginVo);
         if (inSuccess) {
             return ResultData.ok();
         } else {
@@ -49,7 +47,7 @@ public class UserController {
     @ApiOperation("用户登录")
     @PostMapping("/login")
     public ResultData<Map<String, Object>> login(@RequestBody LoginVo loginVo) {
-        log.info("进入自定义登录接口....");
+        //log.info("进入自定义登录接口....");
         Map<String, Object> result = userService.login(loginVo);
         if (result == null || result.isEmpty()) {
             return ResultData.error("用户名或密码错误");

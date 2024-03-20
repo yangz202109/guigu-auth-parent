@@ -9,4 +9,6 @@ public interface SysUserService extends IService<SysUser> {
     Map<String,Object> login(LoginVo loginVo);
 
     void logout();
+
+    Boolean addUser(LoginVo loginVo);
 }
