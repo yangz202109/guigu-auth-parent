@@ -39,7 +39,7 @@ public class RedPackageController {
      *
      * @param totalMoney       总金额
      * @param redPackageNumber 红包的个数
-     * @return
+     * @return 状态
      */
     @ApiOperation("发红包")
     @GetMapping("/send")

@@ -29,11 +29,10 @@ public class CustomUserServiceImpl implements UserDetailsService {
     @Resource
     private SysMenuService sysMenuService;
 
-
     @Override
     public CustomUser loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("开始登陆验证,用户名为: {}", username);
-        
+
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username);
         SysUser sysUser = sysUserMapper.selectOne(wrapper);
