@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * @author yangz
- * @date 2022/12/6 - 13:45
+ * @code 2022/12/6 - 13:45
  * 全局异常处理类,捕获controller抛出的异常返回自定义提示信息
  */
 @RestControllerAdvice

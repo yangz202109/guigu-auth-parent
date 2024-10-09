@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author yangz
- * @createTime 2023/12/19 - 14:21
+ * @code 2023/12/19 - 14:21
  */
 @Api(tags = "红包管理")
 @Slf4j
